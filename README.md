@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 ## WeChange - Event Hosting Platform for Environment | Demo
 
@@ -23,3 +24,7 @@ We made this project in 2 days and won Simplihacks 2.0🥇
 **Possible Future Ideas to be implemented**
 <li>Supplies required for the event can be ordered on the WeChange (eg. saplings required for tree plantation drives, etc.) </li>
 <li> Forum for discussion on topics concerning climate change</li>
+=======
+# TechiePirate-SimplyHacks
+WeChange
+>>>>>>> b765119cd8fdf76e81065bb0b72472d975c55714
