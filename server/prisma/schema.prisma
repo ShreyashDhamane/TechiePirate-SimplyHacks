@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  firstName     String
+  lastName      String
+  email         String          @id @unique
+  password      String
+  image         String?
+  resourcePts   Int             @default(0)
+  workPts       Int             @default(0)
+  Contributor   Contributor[]
+  Events        Events[]
+  Participant   Participant[]
+  Posts         Posts[]
+  eventComments eventComments[]
+  postComments  postComments[]
+}
+
+model postComments {
+  commentId   Int    @id @default(sequence())
+  comment     String
+  userEmail   String
+  postsPostId Int
+  Posts       Posts  @relation(fields: [postsPostId], references: [postId])
+  author      User   @relation(fields: [userEmail], references: [email])
+}
+
+model Posts {
+  postId    Int            @id @default(sequence())
+  title     String
+  tags      String[]
+  content   String
+  userEmail String
+  createdAt DateTime       @default(now())
+  image     String?
+  likes     Int            @default(0)
+  author    User           @relation(fields: [userEmail], references: [email])
+  comments  postComments[]
+}
+
+model eventComments {
+  commentId     Int     @id @default(sequence())
+  comment       String
+  eventsEventId Int?
+  userEmail     String
+  Events        Events? @relation(fields: [eventsEventId], references: [eventId])
+  author        User    @relation(fields: [userEmail], references: [email])
+}
+
+model Contributor {
+  contributorId Int     @id @default(sequence())
+  userEmail     String
+  eventsEventId Int?
+  monetary      Float?
+  Events        Events? @relation(fields: [eventsEventId], references: [eventId])
+  user          User    @relation(fields: [userEmail], references: [email])
+}
+
+model Participant {
+  participantId Int    @id @default(sequence())
+  userEmail     String
+  eventsEventId Int
+  Events        Events @relation(fields: [eventsEventId], references: [eventId])
+  user          User   @relation(fields: [userEmail], references: [email])
+}
+
+model Events {
+  eventId        Int             @id @default(sequence())
+  title          String
+  description    String
+  time           DateTime
+  city           String
+  address        String
+  eventTags      String[]
+  organizerEmail String
+  donationAmount Float           @default(0.0)
+  image          String?
+  lat            Float           @default(0.0)
+  long           Float           @default(0.0)
+  organizer      User            @relation(fields: [organizerEmail], references: [email])
+  contributors   Contributor[]
+  participants   Participant[]
+  comments       eventComments[]
+}
